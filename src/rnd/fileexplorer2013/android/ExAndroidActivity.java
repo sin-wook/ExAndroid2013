@@ -39,7 +39,7 @@ public class ExAndroidActivity extends ListActivity{
 	private String Where_root = "/";
 	private TextView myRoute; 	// 현재 경로를 저장해주는 변수
 	private File currentDir;	// 현재 경로
-	
+	private String testgit;
 	//--------------------프레임 메뉴얼--------------------------
 	private View lay1;
 	private View lay2;
