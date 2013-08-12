@@ -41,6 +41,7 @@ public class ExAndroidActivity extends ListActivity{
 	private File currentDir;	// 현재 경로
 	private File selectedList;	// 선택된 리스트
 	private Button delBT;		// 하단 기능 버튼
+	private TextView savedData;	// 저장된 데이터 참조
 	//--------------------프레임 메뉴얼--------------------------
 	private View lay1;
 	private View lay2;
@@ -49,7 +50,7 @@ public class ExAndroidActivity extends ListActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.customlist);
 		//FileOI fio = new FileOI();
-		
+		savedData = (TextView) findViewById(R.id.saveData);
 		lay1 = findViewById(R.id.test1);
 		lay2 = findViewById(R.id.test2);
 		delBT = (Button) findViewById(R.id.del);
@@ -72,6 +73,8 @@ public class ExAndroidActivity extends ListActivity{
 					}else{
 						Toast.makeText(ExAndroidActivity.this, "삭제 오류", Toast.LENGTH_SHORT).show();
 					}
+				}else{
+					Toast.makeText(ExAndroidActivity.this, "null", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -114,6 +117,7 @@ public class ExAndroidActivity extends ListActivity{
 			public boolean onItemLongClick(AdapterView<?> a, View v, int position,long id) {
 				Where_root = ex_Route.get(position);
 				selectedList = new File(ex_Route.get(position));
+				savedData.setText(selectedList+"("+selectedList.isFile()+")");
 				chg();
 				
 				return true;
@@ -123,12 +127,12 @@ public class ExAndroidActivity extends ListActivity{
 	}
     
 	public void chg(){
-		if(lay1.getVisibility() == View.VISIBLE)  {
-			lay1.setVisibility(View.INVISIBLE);
-			lay2.setVisibility(View.VISIBLE);
-        } else  {
-        	lay2.setVisibility(View.INVISIBLE);
+		if(selectedList.isFile()){
 			lay1.setVisibility(View.VISIBLE);
+			lay2.setVisibility(View.INVISIBLE);
+        } else  {
+        	lay2.setVisibility(View.VISIBLE);
+			lay1.setVisibility(View.INVISIBLE);
         }
 	}
 	
