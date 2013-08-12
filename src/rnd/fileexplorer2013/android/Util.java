@@ -4,23 +4,15 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import rnd.fileexplorer2013.exandroid.R;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
-import android.widget.TextView;
-//import net.appositedesigns.fileexplorer.R;
-//import net.appositedesigns.fileexplorer.activity.FileListActivity;
-//import net.appositedesigns.fileexplorer.callbacks.CancellationCallback;
-//import net.appositedesigns.fileexplorer.model.FileListEntry;
-//
-//import org.apache.commons.io.FileUtils;
+
+import org.apache.commons.io.FileUtils;
 
 public final class Util {
 
@@ -129,7 +121,16 @@ public final class Util {
 		
 	}
 
+	public static boolean delete(File fileToBeDeleted) {
 
+		try
+		{
+			FileUtils.forceDelete(fileToBeDeleted);
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
+	}
 
 	public static boolean canPaste(File destDir) {
 		

@@ -39,7 +39,8 @@ public class ExAndroidActivity extends ListActivity{
 	private String Where_root = "/";
 	private TextView myRoute; 	// 현재 경로를 저장해주는 변수
 	private File currentDir;	// 현재 경로
-	private String testgit;
+	private File selectedList;	// 선택된 리스트
+	private Button delBT;		// 하단 기능 버튼
 	//--------------------프레임 메뉴얼--------------------------
 	private View lay1;
 	private View lay2;
@@ -51,15 +52,30 @@ public class ExAndroidActivity extends ListActivity{
 		
 		lay1 = findViewById(R.id.test1);
 		lay2 = findViewById(R.id.test2);
-		
+		delBT = (Button) findViewById(R.id.del);
 		myRoute = (TextView) findViewById(R.id.Route);
 		bt_newfolder = (Button)findViewById(R.id.menu_newfolder);
+		
 		bt_newfolder.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				confirmCreateFolder();
 			}
 		});
+		delBT.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+//				Delete selected to file or folder
+				if(selectedList.isFile()){
+					if(Util.delete(selectedList)){
+						Toast.makeText(ExAndroidActivity.this, "삭제 완료", Toast.LENGTH_SHORT).show();
+					}else{
+						Toast.makeText(ExAndroidActivity.this, "삭제 오류", Toast.LENGTH_SHORT).show();
+					}
+				}
+			}
+		});
+		
 		
 		getDir(root);
 		
@@ -96,7 +112,10 @@ public class ExAndroidActivity extends ListActivity{
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> a, View v, int position,long id) {
+				Where_root = ex_Route.get(position);
+				selectedList = new File(ex_Route.get(position));
 				chg();
+				
 				return true;
 			}
 		};
