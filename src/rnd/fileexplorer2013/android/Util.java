@@ -121,16 +121,6 @@ public final class Util {
 		
 	}
 
-	public static boolean delete(File fileToBeDeleted) {
-
-		try
-		{
-			FileUtils.forceDelete(fileToBeDeleted);
-			return true;
-		} catch (IOException e) {
-			return false;
-		}
-	}
 
 	public static boolean canPaste(File destDir) {
 		

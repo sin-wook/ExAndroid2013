@@ -42,6 +42,7 @@ public class ExAndroidActivity extends ListActivity{
 	private File selectedList;	// 선택된 리스트
 	private Button delBT;		// 하단 기능 버튼
 	private TextView savedData;	// 저장된 데이터 참조
+	
 	//--------------------프레임 메뉴얼--------------------------
 	private View lay1;
 	private View lay2;
@@ -57,34 +58,21 @@ public class ExAndroidActivity extends ListActivity{
 		myRoute = (TextView) findViewById(R.id.Route);
 		bt_newfolder = (Button)findViewById(R.id.menu_newfolder);
 		
-		bt_newfolder.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				confirmCreateFolder();
-			}
-		});
-		delBT.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-//				Delete selected to file or folder
-				if(selectedList.isFile()){
-					if(Util.delete(selectedList)){
-						Toast.makeText(ExAndroidActivity.this, "삭제 완료", Toast.LENGTH_SHORT).show();
-					}else{
-						Toast.makeText(ExAndroidActivity.this, "삭제 오류", Toast.LENGTH_SHORT).show();
-					}
-				}else{
-					Toast.makeText(ExAndroidActivity.this, "null", Toast.LENGTH_SHORT).show();
-				}
-			}
-		});
-		
+		bt_newfolder.setOnClickListener(getClickListener_newfolder());
+		delBT.setOnClickListener(getClickListener_del());
 		
 		getDir(root);
 		
 		mList = getListView();
 		mList.setAdapter(mAdapter);
-		mList.setOnItemClickListener(new OnItemClickListener() {
+		mList.setOnItemClickListener(getClickListener());
+		mList.setOnItemLongClickListener(getLongClickListener());
+		setListAdapter(mAdapter);
+	}// onCreate() end
+	
+//	Click Event : return method
+	private OnItemClickListener getClickListener(){
+		return new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> a, View v, int position,long id) {
@@ -103,12 +91,8 @@ public class ExAndroidActivity extends ListActivity{
 					Toast.makeText(ExAndroidActivity.this, file.getName(), Toast.LENGTH_SHORT).show();
 				}
 			}
-			
-		});
-		mList.setOnItemLongClickListener(getLongClickListener());
-		setListAdapter(mAdapter);
+		};
 	}
-	
 //	Long Click Event : return method
 	private OnItemLongClickListener getLongClickListener(){
 		return new OnItemLongClickListener() {
@@ -117,17 +101,55 @@ public class ExAndroidActivity extends ListActivity{
 			public boolean onItemLongClick(AdapterView<?> a, View v, int position,long id) {
 				Where_root = ex_Route.get(position);
 				selectedList = new File(ex_Route.get(position));
-				savedData.setText(selectedList+"("+selectedList.isFile()+")");
-				chg();
+				
+				if(selectedList.canWrite()){
+					savedData.setText(selectedList+"("+selectedList.exists()+")");
+					chg();
+				}else{
+					Toast.makeText(ExAndroidActivity.this, "접근 권한이 없습니다.", Toast.LENGTH_SHORT).show();
+					selectedList=null;
+					savedData.setText(selectedList+"");
+				}
 				
 				return true;
 			}
 		};
 		
 	}
-    
+//	delete click event
+	private OnClickListener getClickListener_del(){
+		return new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+//				Delete selected to file or folder
+				if(selectedList.canWrite()){
+					if(selectedList.delete()){
+						Toast.makeText(ExAndroidActivity.this, "삭제 완료", Toast.LENGTH_SHORT).show();
+					}else{
+						Toast.makeText(ExAndroidActivity.this, "삭제 오류", Toast.LENGTH_SHORT).show();
+					}
+					
+					getDir(currentDir.getAbsolutePath());
+				}else{
+					Toast.makeText(ExAndroidActivity.this, "접근 권한이 없습니다.", Toast.LENGTH_SHORT).show();
+				}
+			}
+		};
+	}
+//	new folder click event
+	private OnClickListener getClickListener_newfolder(){
+		return new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				confirmCreateFolder();
+			}
+		};
+	}
+//	change View - Status bar (lay1:button, lay2:image)
 	public void chg(){
-		if(selectedList.isFile()){
+		if(selectedList.exists()){
 			lay1.setVisibility(View.VISIBLE);
 			lay2.setVisibility(View.INVISIBLE);
         } else  {
@@ -208,7 +230,7 @@ public class ExAndroidActivity extends ListActivity{
 			getDir(ex_Route.get(0));	
 	}
 	
-	public int countSize(int _size){
+	private int countSize(int _size){
 //		double kil =(_size/1024);
 //		double meg =(kil/1024);
 		return _size;
