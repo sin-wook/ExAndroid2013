@@ -9,8 +9,9 @@
         android:targetSdkVersion="10" />
 	
     <permission-group android:name="android.permission-group.STORAGE" ></permission-group>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -19,7 +20,8 @@
         <activity
             android:name="rnd.fileexplorer2013.android.ExAndroidActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

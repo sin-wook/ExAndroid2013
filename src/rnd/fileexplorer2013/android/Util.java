@@ -7,12 +7,18 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
+
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
-
-import org.apache.commons.io.FileUtils;
+//import net.appositedesigns.fileexplorer.R;
+//import net.appositedesigns.fileexplorer.activity.FileListActivity;
+//import net.appositedesigns.fileexplorer.callbacks.CancellationCallback;
+//import net.appositedesigns.fileexplorer.model.FileListEntry;
+//
+//import org.apache.commons.io.FileUtils;
 
 public final class Util {
 
@@ -122,6 +128,7 @@ public final class Util {
 	}
 
 
+
 	public static boolean canPaste(File destDir) {
 		
 		if(getFileToPaste() == null)
@@ -182,11 +189,10 @@ public final class Util {
 		
 	}
 
-
-	
-	public int countSize(int _size){
-//		double kil =(_size/1024);
-//		double meg =(kil/1024);
-		return _size;
+	public static void Copy_dir(File fil1, File fil2) throws IOException{
+		FileUtils.copyDirectory(fil1, fil2);
+	}
+	public static void Copy_file(File fil1, File fil2) throws IOException{
+		FileUtils.copyFileToDirectory(fil1, fil2);
 	}
 }
