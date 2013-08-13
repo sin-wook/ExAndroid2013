@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
+
 import rnd.fileexplorer2013.exandroid.R;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -11,10 +13,8 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -41,7 +41,10 @@ public class ExAndroidActivity extends ListActivity{
 	private File currentDir;	// 현재 경로
 	private File selectedList;	// 선택된 리스트
 	private Button delBT;		// 하단 기능 버튼
+	private Button renameBT;	// 이름변경
 	private TextView savedData;	// 저장된 데이터 참조
+	AlertDialog.Builder alert;
+	EditText input;
 	
 	//--------------------프레임 메뉴얼--------------------------
 	private View lay1;
@@ -55,11 +58,15 @@ public class ExAndroidActivity extends ListActivity{
 		lay1 = findViewById(R.id.test1);
 		lay2 = findViewById(R.id.test2);
 		delBT = (Button) findViewById(R.id.del);
+		renameBT = (Button) findViewById(R.id.rename);
 		myRoute = (TextView) findViewById(R.id.Route);
 		bt_newfolder = (Button)findViewById(R.id.menu_newfolder);
 		
+		
+		
 		bt_newfolder.setOnClickListener(getClickListener_newfolder());
 		delBT.setOnClickListener(getClickListener_del());
+		renameBT.setOnClickListener(getClickListener_rename());
 		
 		getDir(root);
 		
@@ -109,6 +116,7 @@ public class ExAndroidActivity extends ListActivity{
 					Toast.makeText(ExAndroidActivity.this, "접근 권한이 없습니다.", Toast.LENGTH_SHORT).show();
 					selectedList=null;
 					savedData.setText(selectedList+"");
+					chg();
 				}
 				
 				return true;
@@ -131,6 +139,62 @@ public class ExAndroidActivity extends ListActivity{
 					}
 					
 					getDir(currentDir.getAbsolutePath());
+					selectedList=null;
+					savedData.setText(selectedList+"");
+					chg();
+				}else{
+					Toast.makeText(ExAndroidActivity.this, "접근 권한이 없습니다.", Toast.LENGTH_SHORT).show();
+				}
+			}
+		};
+	}
+//	rename click event
+	private OnClickListener getClickListener_rename(){
+		return new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(selectedList.canWrite()){
+					
+					alert = new AlertDialog.Builder(v.getContext());
+					input = new EditText(v.getContext());
+					
+					alert.setTitle(getString(R.string.rename_obj));
+					// Set an EditText view to get user input
+					
+					input.setText(selectedList.getName());
+					input.setSingleLine();
+					alert.setView(input);
+
+					alert.setPositiveButton(android.R.string.ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int whichButton) {
+									CharSequence newName = input.getText(); 
+									
+									Boolean renameResult = selectedList.renameTo(new File(selectedList.getParent()+File.separator+newName));
+									
+									if (renameResult){
+										Toast.makeText(ExAndroidActivity.this, "Succesed", Toast.LENGTH_SHORT).show();
+										getDir(currentDir.getAbsolutePath());
+									}else{
+										Toast.makeText(ExAndroidActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+									}
+									selectedList=null;
+									savedData.setText(selectedList+"");
+									chg();
+								}
+							});
+
+					alert.setNegativeButton(android.R.string.cancel,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int whichButton) {
+
+									dialog.dismiss();
+								}
+							});
+
+					alert.show();
+					
 				}else{
 					Toast.makeText(ExAndroidActivity.this, "접근 권한이 없습니다.", Toast.LENGTH_SHORT).show();
 				}
@@ -144,12 +208,14 @@ public class ExAndroidActivity extends ListActivity{
 			@Override
 			public void onClick(View v) {
 				confirmCreateFolder();
+
 			}
 		};
 	}
+	
 //	change View - Status bar (lay1:button, lay2:image)
 	public void chg(){
-		if(selectedList.exists()){
+		if(selectedList==null || selectedList.exists()){
 			lay1.setVisibility(View.VISIBLE);
 			lay2.setVisibility(View.INVISIBLE);
         } else  {
@@ -239,11 +305,12 @@ public class ExAndroidActivity extends ListActivity{
 //	create new folder 
 	private void confirmCreateFolder() {
 		
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
+		alert = new AlertDialog.Builder(this);
+		input = new EditText(this);
+		
 		alert.setTitle(getString(R.string.create_folder));
 		// Set an EditText view to get user input
-		final EditText input = new EditText(this);
+//		final EditText input = new EditText(this);
 		input.setHint(getString(R.string.enter_folder_name));
 		input.setSingleLine();
 		alert.setView(input);

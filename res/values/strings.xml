@@ -5,6 +5,8 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
 	<string name="create_folder">Create folder</string>
+	<string name="rename_obj">Name Change</string>
+	<string name="enter_rename">Enter rename</string>
 	<string name="enter_folder_name">Enter folder name</string>
     
 </resources>
