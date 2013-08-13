@@ -20,7 +20,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_weight="0" >
 
         <TextView
             android:id="@+id/Route"
@@ -39,41 +40,52 @@
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
-        android:layout_height="410dp"
+        android:layout_height="fill_parent"
         android:layout_gravity="center"
+        android:layout_weight="1"
+        android:fastScrollEnabled="true"
         android:focusable="true"
         android:gravity="center" />
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_weight="0" >
 
         <LinearLayout
-             android:id="@+id/test1"
+            android:id="@+id/test1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:orientation="horizontal"
             android:visibility="invisible" >
 
             <Button
                 android:id="@+id/copy"
-                android:layout_width="80dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="복사 붙여넣기" />
+                android:background="@drawable/ic_action_copy_light"
+                android:layout_gravity="center|center"
+                android:layout_margin="10dp"
+                 />
+
             <Button
                 android:id="@+id/move"
-                android:layout_width="80dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="이동" />
+
             <Button
                 android:id="@+id/del"
-                android:layout_width="80dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="삭제" />
+
             <Button
                 android:id="@+id/rename"
-                android:layout_width="80dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="이름바꾸기" />
+
         </LinearLayout>
 
         <LinearLayout

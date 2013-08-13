@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-
 import rnd.fileexplorer2013.exandroid.R;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -13,8 +11,10 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -40,8 +40,12 @@ public class ExAndroidActivity extends ListActivity{
 	private TextView myRoute; 	// 현재 경로를 저장해주는 변수
 	private File currentDir;	// 현재 경로
 	private File selectedList;	// 선택된 리스트
-	private Button delBT;		// 하단 기능 버튼
+//	------------- button ---------------------------------
+	private Button delBT;		// 삭제 버튼
 	private Button renameBT;	// 이름변경
+	private Button copyBT;		// 복사
+	private Button moveBT;		// 이동
+	
 	private TextView savedData;	// 저장된 데이터 참조
 	AlertDialog.Builder alert;
 	EditText input;
@@ -58,12 +62,20 @@ public class ExAndroidActivity extends ListActivity{
 		lay1 = findViewById(R.id.test1);
 		lay2 = findViewById(R.id.test2);
 		delBT = (Button) findViewById(R.id.del);
+		moveBT = (Button) findViewById(R.id.move);
+		copyBT = (Button) findViewById(R.id.copy);
 		renameBT = (Button) findViewById(R.id.rename);
 		myRoute = (TextView) findViewById(R.id.Route);
 		bt_newfolder = (Button)findViewById(R.id.menu_newfolder);
+		Display display = ((WindowManager)getSystemService(this.WINDOW_SERVICE)).getDefaultDisplay();
+		int disWidth = display.getWidth();
+//		------------ Button style ---------------------
+		copyBT.setWidth(disWidth/4);
+		delBT.setWidth(disWidth/4);
+		renameBT.setWidth(disWidth/4);
+		moveBT.setWidth(disWidth/4);
 		
-		
-		
+//		------------ Listener -------------------------
 		bt_newfolder.setOnClickListener(getClickListener_newfolder());
 		delBT.setOnClickListener(getClickListener_del());
 		renameBT.setOnClickListener(getClickListener_rename());
@@ -93,6 +105,9 @@ public class ExAndroidActivity extends ListActivity{
 						getDir(ex_Route.get(position));
 					} else {
 						Toast.makeText(ExAndroidActivity.this, "접근 권한이 없습니다", Toast.LENGTH_SHORT).show();
+						selectedList=null;
+						savedData.setText(selectedList+"");
+						chg();
 					}
 				} else{
 					Toast.makeText(ExAndroidActivity.this, file.getName(), Toast.LENGTH_SHORT).show();
@@ -215,7 +230,7 @@ public class ExAndroidActivity extends ListActivity{
 	
 //	change View - Status bar (lay1:button, lay2:image)
 	public void chg(){
-		if(selectedList==null || selectedList.exists()){
+		if(selectedList!=null && selectedList.exists()){
 			lay1.setVisibility(View.VISIBLE);
 			lay2.setVisibility(View.INVISIBLE);
         } else  {
