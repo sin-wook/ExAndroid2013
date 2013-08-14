@@ -1,11 +1,13 @@
 package rnd.fileexplorer2013.android;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
 
 import rnd.fileexplorer2013.exandroid.R;
 import android.app.AlertDialog;
@@ -22,6 +24,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +42,7 @@ public class ExAndroidActivity extends ListActivity {
 	private Button copyBT;		// 복사
 	private Button moveBT;		// 이동
 	private Button bt_newfolder;
-
+	
 	File copy_root;
 	private File selectedList = null;	// 선택된 리스트
 	private int Fmode = 0;	// 0:null, 1:copy&paste
@@ -52,11 +55,11 @@ public class ExAndroidActivity extends ListActivity {
 	
 	private List<String> ex_List = new ArrayList<String>();
 	private List<String> ex_Route = new ArrayList<String>();
-	final private String root = "/storage"; // 초기 시작 경로, 하지만 루팅이 안되기 때문에 다른곳은 접ㄱ느이 불가하다
+	final private String root = "/"; // 초기 시작 경로, 하지만 루팅이 안되기 때문에 다른곳은 접ㄱ느이 불가하다
 	private String Where_root = "/";
 	private TextView myRoute; // 현재 경로를 저장해주는 변수
 	private File currentDir; // 현재 경로
-
+	
 	// --------------------프레임 메뉴얼--------------------------
 	private View lay1;
 	private View lay2;
@@ -69,7 +72,8 @@ public class ExAndroidActivity extends ListActivity {
 		ConnectionArea();
 		ButtonArea();
 		getDir(root);
-
+		
+		
 		mList = getListView();
 		mList.setAdapter(mAdapter);
 		mList.setOnItemClickListener(new OnItemClickListener() {
@@ -94,6 +98,7 @@ public class ExAndroidActivity extends ListActivity {
 			}
 
 		});
+		
 		mList.setOnItemLongClickListener(getLongClickListener());
 		setListAdapter(mAdapter);
 	}
@@ -107,6 +112,7 @@ public class ExAndroidActivity extends ListActivity {
 		renameBT = (Button) findViewById(R.id.rename);
 		myRoute = (TextView) findViewById(R.id.Route);
 		bt_newfolder = (Button)findViewById(R.id.menu_newfolder);
+		
 	}
 
 	private void ButtonArea() {

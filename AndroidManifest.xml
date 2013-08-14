@@ -21,7 +21,7 @@
             android:name="rnd.fileexplorer2013.android.ExAndroidActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-             >
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

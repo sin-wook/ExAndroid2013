@@ -28,9 +28,9 @@
         android:layout_width="fill_parent"
         android:layout_height="410dp"
         android:layout_gravity="center"
+        android:fastScrollEnabled="true"
         android:focusable="true"
-        android:gravity="center"
-        android:fastScrollEnabled="true" />
+        android:gravity="center" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -40,28 +40,33 @@
              android:id="@+id/test1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:visibility="invisible" >
+            android:visibility="invisible"
+            android:gravity="center|center" >
 
             <Button
                 android:id="@+id/copy"
-                android:layout_width="80dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="복사 붙여넣기" />
+                android:background="@drawable/ic_action_copy"
+                android:layout_margin="10dp"/>
             <Button
                 android:id="@+id/move"
-                android:layout_width="80dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="이동" />
+                android:background="@drawable/ic_action_cut"
+                android:layout_margin="10dp" />
             <Button
                 android:id="@+id/del"
-                android:layout_width="80dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="삭제" />
+                android:background="@drawable/ic_action_delete"
+                android:layout_margin="10dp" />
             <Button
                 android:id="@+id/rename"
-                android:layout_width="80dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="이름바꾸기" />
+                android:background="@drawable/ic_action_rename"
+                android:layout_margin="10dp" />
         </LinearLayout>
 
         <LinearLayout
